@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Landon Hotel Chatbot</title>
+    <!-- Bootstrap CSS for styling -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            background-color: #f4f4f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .chat-container {
+            max-width: 600px;
+            margin: 50px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+        .chat-header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .chat-header h2 {
+            color: #007bff;
+            font-weight: bold;
+        }
+        .chatbox {
+            height: 300px;
+            overflow-y: auto;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 10px;
+            margin-bottom: 15px;
+            background-color: #f8f9fa;
+        }
+        .message {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 15px;
+            max-width: 75%;
+        }
+        .user-message {
+            background-color: #007bff;
+            color: white;
+            text-align: right;
+            margin-left: auto;
+        }
+        .bot-message {
+            background-color: #e9ecef;
+            color: #333;
+        }
+        .input-group {
+            position: relative;
+        }
+        #sendButton {
+            border-top-left-radius: 0;
+            border-bottom-left-radius: 0;
+        }
+        .spinner-border {
+            margin-left: 10px;
+        }
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat-container">
+        <div class="chat-header">
+            <h2>Landon Hotel Chatbot</h2>
+        </div>
+        <div id="chatbox" role="log" aria-live="polite" aria-relevant="additions" class="chatbox">
+            <!-- Chat messages will appear here -->
+        </div>
+        <div class="input-group">
+            <input id="question" type="text" class="form-control" placeholder="Ask a question about Landon Hotel..." aria-label="Chat input">
+            <div class="input-group-append">
+                <button id="sendButton" class="btn btn-primary" type="button">Send</button>
+            </div>
+        </div>
+        <div id="loading" class="loading" style="display: none;">
+            <div class="spinner-border text-primary" role="status">
+                <span class="sr-only">Loading...</span>
+            </div>
+            <span>Processing your question...</span>
+        </div>
+    </div>
+
+    <!-- jQuery and Bootstrap JS for interactivity -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            $('#sendButton').on('click', function() {
+                const question = $('#question').val().trim();
+                if (question === '') {
+                    alert('Please enter a question.');
+                    return;
+                }
+                
+                // Append user message
+                $('#chatbox').append('<div class="message user-message">' + question + '</div>');
+                $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+                $('#question').val('');
+                $('#loading').show();
+
+                // Send question to the backend
+                $.ajax({
+                    url: '/chatbot',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ question: question }),
+                    success: function(response) {
+                        $('#loading').hide();
+                        const botResponse = response.response || 'No response available.';
+                        $('#chatbox').append('<div class="message bot-message">' + botResponse + '</div>');
+                        $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+                    },
+                    error: function() {
+                        $('#loading').hide();
+                        $('#chatbox').append('<div class="message bot-message">There was an error processing your request.</div>');
+                        $('#chatbox').scrollTop($('#chatbox')[0].scrollHeight);
+                    }
+                });
+            });
+
+            // Allow pressing Enter to send message
+            $('#question').on('keypress', function(e) {
+                if (e.which === 13) {
+                    $('#sendButton').click();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
