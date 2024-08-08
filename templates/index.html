@@ -8,33 +8,33 @@
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
-            background-color: #f4f4f9;
+            background-color: #eaeaea;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
         .chat-container {
             max-width: 600px;
             margin: 50px auto;
             padding: 20px;
-            background-color: #fff;
+            background-color: #f8f9fa;
             border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
         .chat-header {
             text-align: center;
             margin-bottom: 20px;
         }
         .chat-header h2 {
-            color: #007bff;
+            color: #495057;
             font-weight: bold;
         }
         .chatbox {
             height: 300px;
             overflow-y: auto;
-            border: 1px solid #dee2e6;
+            border: 1px solid #ced4da;
             border-radius: 5px;
             padding: 10px;
             margin-bottom: 15px;
-            background-color: #f8f9fa;
+            background-color: #ffffff;
         }
         .message {
             margin: 10px 0;
@@ -43,13 +43,13 @@
             max-width: 75%;
         }
         .user-message {
-            background-color: #007bff;
+            background-color: #adb5bd;
             color: white;
             text-align: right;
             margin-left: auto;
         }
         .bot-message {
-            background-color: #e9ecef;
+            background-color: #dee2e6;
             color: #333;
         }
         .input-group {
@@ -81,11 +81,11 @@
         <div class="input-group">
             <input id="question" type="text" class="form-control" placeholder="Ask a question about Landon Hotel..." aria-label="Chat input">
             <div class="input-group-append">
-                <button id="sendButton" class="btn btn-primary" type="button">Send</button>
+                <button id="sendButton" class="btn btn-dark" type="button">Send</button>
             </div>
         </div>
         <div id="loading" class="loading" style="display: none;">
-            <div class="spinner-border text-primary" role="status">
+            <div class="spinner-border text-secondary" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
             <span>Processing your question...</span>
