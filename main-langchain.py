@@ -35,10 +35,11 @@ lds_assistant_prompt_template = PromptTemplate(
 )
 
 # Set up the language model with limited completion length
-llm = OpenAI(model='gpt-3.5-turbo-instruct', temperature=0, max_tokens=256)
+llm = OpenAI(model='gpt-3.5-turbo', temperature=0, max_tokens=256)
 
 # Create the LLM chain
 llm_chain = lds_assistant_prompt_template | llm
+
 
 # Define the query function
 def query_llm(question):
@@ -49,12 +50,15 @@ def query_llm(question):
         print(f"An error occurred: {e}")
         return "There was an error processing your request."
 
+
 # Initialize Flask app
 app = Flask(__name__)
+
 
 @app.route("/")
 def index():
     return render_template("index.html")
+
 
 @app.route("/chatbot", methods=["POST"])
 def chatbot():
@@ -62,6 +66,7 @@ def chatbot():
     question = data.get("question", "")
     response = query_llm(question)
     return jsonify({"response": response})
+
 
 if __name__ == "__main__":
     app.run(debug=True)
