@@ -35,7 +35,7 @@ lds_assistant_prompt_template = PromptTemplate(
 )
 
 # Use ChatOpenAI (correct model setup for chat models like gpt-3.5-turbo)
-llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=0, max_tokens=256)
+llm = ChatOpenAI(model='gpt-4', temperature=0, max_tokens=256)
 
 # Create the LLM chain
 llm_chain = lds_assistant_prompt_template | llm
