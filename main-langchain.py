@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from langchain_openai import OpenAI
+from langchain_openai import ChatOpenAI
 from langchain.prompts import PromptTemplate
 
 # Load and check the prompt size from the file with explicit encoding
@@ -34,8 +34,8 @@ lds_assistant_prompt_template = PromptTemplate(
     template=lds_assistant_template
 )
 
-# Set up the language model with limited completion length
-llm = OpenAI(model='gpt-3.5-turbo', temperature=0, max_tokens=256)
+# Use ChatOpenAI (correct model setup for chat models like gpt-3.5-turbo)
+llm = ChatOpenAI(model='gpt-3.5-turbo', temperature=0, max_tokens=256)
 
 # Create the LLM chain
 llm_chain = lds_assistant_prompt_template | llm
@@ -44,8 +44,22 @@ llm_chain = lds_assistant_prompt_template | llm
 # Define the query function
 def query_llm(question):
     try:
+        # Get the response from the LLM chain
         response = llm_chain.invoke({'question': question})
-        return response
+        
+        # Debug: Print the entire response object
+        print(f"Response object: {response}")
+        
+        # Print the type of the response
+        print(f"Response type: {type(response)}")
+        
+        # Attempt to access 'content' if it's a dict or check other possible structures
+        if isinstance(response, dict) and 'content' in response:
+            return response['content']
+        elif hasattr(response, 'content'):
+            return response.content
+        else:
+            return "No content found in response."
     except Exception as e:
         print(f"An error occurred: {e}")
         return "There was an error processing your request."
@@ -63,11 +77,18 @@ def index():
 @app.route("/chatbot", methods=["POST"])
 def chatbot():
     data = request.get_json()
+    
+    # Debug: Print the incoming data
+    print(f"Received question: {data.get('question', '')}")
+    
     question = data.get("question", "")
     response = query_llm(question)
+    
+    # Debug: Print the response that will be returned
+    print(f"Returning response: {response}")
+    
     return jsonify({"response": response})
 
 
 if __name__ == "__main__":
     app.run(debug=True)
-
