@@ -1,5 +1,6 @@
 import fitz
 
+
 def extract_text_from_pdf(pdf_file_path):
     try:
         doc = fitz.open(pdf_file_path)
@@ -11,8 +12,9 @@ def extract_text_from_pdf(pdf_file_path):
         return pdf_text
     except Exception as e:
         return f"Error extracting text: {e}"
+
     
-pdf_path = "Landon-Hotel.pdf"
+pdf_path = "the-spoon.pdf"
 extracted_text = extract_text_from_pdf(pdf_path)
 
 file = open("pdf_text", "w", encoding='utf-8')
