@@ -1,11 +1,14 @@
 # Ignore virtual environments
-venv/
 env/
 
 # Ignore Python cache files
 __pycache__/
 *.pyc
 *.pyo
+
+# Ignore any IDE specific files
+.idea/
+.vscode/
 
 # Ignore environment variable files
 .env
